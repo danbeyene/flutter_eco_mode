@@ -138,18 +138,33 @@ private object EcoModeApiCodec : StandardMessageCodec() {
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface EcoModeApi {
-  fun getPlatformInfo(): String
-  fun getBatteryLevel(): Double
-  fun getBatteryState(): BatteryState
-  fun isBatteryInLowPowerMode(): Boolean
-  fun getThermalState(): ThermalState
-  fun getProcessorCount(): Long
+  // UNUSED: Platform info not used by DevicePerformance
+  // fun getPlatformInfo(): String
+  
+  // UNUSED: Battery methods not used by DevicePerformance
+  // fun getBatteryLevel(): Double
+  // fun getBatteryState(): BatteryState
+  // fun isBatteryInLowPowerMode(): Boolean
+  
+  // UNUSED: Thermal state not used by DevicePerformance
+  // fun getThermalState(): ThermalState
+  
+  // UNUSED: Processor count not used (DevicePerformance uses Platform.numberOfProcessors)
+  // fun getProcessorCount(): Long
+  
+  // USED: Total memory is used by DevicePerformance
   fun getTotalMemory(): Long
-  fun getFreeMemory(): Long
-  fun getTotalStorage(): Long
-  fun getFreeStorage(): Long
+  
+  // UNUSED: Free memory and storage not used by DevicePerformance
+  // fun getFreeMemory(): Long
+  // fun getTotalStorage(): Long
+  // fun getFreeStorage(): Long
+  
+  // USED: getEcoScore is used internally by getDeviceRange
   fun getEcoScore(): Double?
-  fun getConnectivity(): Connectivity
+  
+  // UNUSED: Connectivity not used by DevicePerformance
+  // fun getConnectivity(): Connectivity
 
   companion object {
     /** The codec used by EcoModeApi. */

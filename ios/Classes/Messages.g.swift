@@ -130,18 +130,37 @@ class EcoModeApiCodec: FlutterStandardMessageCodec {
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol EcoModeApi {
-  func getPlatformInfo() throws -> String
-  func getBatteryLevel() throws -> Double
-  func getBatteryState() throws -> BatteryState
-  func isBatteryInLowPowerMode() throws -> Bool
-  func getThermalState() throws -> ThermalState
+  // UNUSED: Platform info not used by DevicePerformance
+  // func getPlatformInfo() throws -> String
+  
+  // UNUSED: Battery methods not used by DevicePerformance
+  // func getBatteryLevel() throws -> Double
+  // func getBatteryState() throws -> BatteryState
+  // func isBatteryInLowPowerMode() throws -> Bool
+  
+  // UNUSED: Thermal state not used by DevicePerformance
+  // func getThermalState() throws -> ThermalState
+  
+  // Used internally by getEcoScore
   func getProcessorCount() throws -> Int64
+  
+  // USED: Total memory is used by DevicePerformance
   func getTotalMemory() throws -> Int64
-  func getFreeMemory() throws -> Int64
+  
+  // UNUSED: Free memory not used by DevicePerformance
+  // func getFreeMemory() throws -> Int64
+  
+  // Used internally by getEcoScore
   func getTotalStorage() throws -> Int64
-  func getFreeStorage() throws -> Int64
+  
+  // UNUSED: Free storage not used by DevicePerformance
+  // func getFreeStorage() throws -> Int64
+  
+  // USED: getEcoScore is used internally by getDeviceRange
   func getEcoScore() throws -> Double?
-  func getConnectivity() throws -> Connectivity
+  
+  // UNUSED: Connectivity not used by DevicePerformance
+  // func getConnectivity() throws -> Connectivity
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
