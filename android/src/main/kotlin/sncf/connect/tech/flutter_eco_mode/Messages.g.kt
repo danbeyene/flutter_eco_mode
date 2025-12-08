@@ -43,227 +43,19 @@ class FlutterError (
   override val message: String? = null,
   val details: Any? = null
 ) : Throwable()
-
-enum class BatteryState(val raw: Int) {
-  CHARGING(0),
-  DISCHARGING(1),
-  FULL(2),
-  UNKNOWN(3);
-
-  companion object {
-    fun ofRaw(raw: Int): BatteryState? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-enum class ThermalState(val raw: Int) {
-  /** nominal value */
-  SAFE(0),
-  /** device is getting warm, but not under throttling */
-  FAIR(1),
-  /** device is getting warm and performance is throttled */
-  SERIOUS(2),
-  /** performance is throttled, device is too hot */
-  CRITICAL(3),
-  /** unknown state */
-  UNKNOWN(4);
-
-  companion object {
-    fun ofRaw(raw: Int): ThermalState? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-enum class ConnectivityType(val raw: Int) {
-  ETHERNET(0),
-  WIFI(1),
-  MOBILE2G(2),
-  MOBILE3G(3),
-  MOBILE4G(4),
-  MOBILE5G(5),
-  NONE(6),
-  UNKNOWN(7);
-
-  companion object {
-    fun ofRaw(raw: Int): ConnectivityType? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class Connectivity (
-  val type: ConnectivityType,
-  val wifiSignalStrength: Long? = null
-
-) {
-  companion object {
-    @Suppress("LocalVariableName")
-    fun fromList(__pigeon_list: List<Any?>): Connectivity {
-      val type = ConnectivityType.ofRaw(__pigeon_list[0] as Int)!!
-      val wifiSignalStrength = __pigeon_list[1].let { num -> if (num is Int) num.toLong() else num as Long? }
-      return Connectivity(type, wifiSignalStrength)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      type.raw,
-      wifiSignalStrength,
-    )
-  }
-}
-private object EcoModeApiCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          Connectivity.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
-    when (value) {
-      is Connectivity -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
-  }
-}
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface EcoModeApi {
-  // UNUSED: Platform info not used by DevicePerformance
-  // fun getPlatformInfo(): String
-  
-  // UNUSED: Battery methods not used by DevicePerformance
-  // fun getBatteryLevel(): Double
-  // fun getBatteryState(): BatteryState
-  // fun isBatteryInLowPowerMode(): Boolean
-  
-  // UNUSED: Thermal state not used by DevicePerformance
-  // fun getThermalState(): ThermalState
-  
-  // UNUSED: Processor count not used (DevicePerformance uses Platform.numberOfProcessors)
-  // fun getProcessorCount(): Long
-  
-  // USED: Total memory is used by DevicePerformance
   fun getTotalMemory(): Long
-  
-  // UNUSED: Free memory and storage not used by DevicePerformance
-  // fun getFreeMemory(): Long
-  // fun getTotalStorage(): Long
-  // fun getFreeStorage(): Long
-  
-  // USED: getEcoScore is used internally by getDeviceRange
   fun getEcoScore(): Double?
-  
-  // UNUSED: Connectivity not used by DevicePerformance
-  // fun getConnectivity(): Connectivity
 
   companion object {
     /** The codec used by EcoModeApi. */
     val codec: MessageCodec<Any?> by lazy {
-      EcoModeApiCodec
+      StandardMessageCodec()
     }
     /** Sets up an instance of `EcoModeApi` to handle messages through the `binaryMessenger`. */
     fun setUp(binaryMessenger: BinaryMessenger, api: EcoModeApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getPlatformInfo$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getPlatformInfo())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getBatteryLevel$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getBatteryLevel())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getBatteryState$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getBatteryState().raw)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.isBatteryInLowPowerMode$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.isBatteryInLowPowerMode())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getThermalState$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getThermalState().raw)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getProcessorCount$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getProcessorCount())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getTotalMemory$separatedMessageChannelSuffix", codec)
         if (api != null) {
@@ -280,71 +72,11 @@ interface EcoModeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getFreeMemory$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getFreeMemory())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getTotalStorage$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getTotalStorage())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getFreeStorage$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getFreeStorage())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getEcoScore$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf<Any?>(api.getEcoScore())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getConnectivity$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf<Any?>(api.getConnectivity())
             } catch (exception: Throwable) {
               wrapError(exception)
             }

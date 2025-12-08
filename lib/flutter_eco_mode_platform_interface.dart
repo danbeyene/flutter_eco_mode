@@ -24,72 +24,14 @@ abstract class FlutterEcoModePlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  // UNUSED: Platform info not used by DevicePerformance
-  // /// Return the current platform info.
-  // Future<String?> getPlatformInfo();
-
-  // UNUSED: Battery methods not used by DevicePerformance
-  // /// Return the current battery level.
-  // Future<double?> getBatteryLevel();
-
-  // /// Return a stream of battery level.
-  // Stream<double> get batteryLevelEventStream;
-
-  // /// Return the current battery state.
-  // Future<BatteryState> getBatteryState();
-
-  // /// Return a stream of battery state.
-  // Stream<BatteryState> get batteryStateEventStream;
-
-  // /// Return the current battery save mode.
-  // Future<bool?> isBatteryInLowPowerMode();
-
-  // /// Return a stream of battery save mode change.
-  // Stream<bool> get lowPowerModeEventStream;
-
-  // /// Return the current thermal state.
-  // Future<ThermalState> getThermalState();
-
-  // UNUSED: Processor count not used by DevicePerformance (uses Platform.numberOfProcessors)
-  // /// Return the number of core.
-  // Future<int?> getProcessorCount();
 
   // USED: Total memory is used by DevicePerformance
   /// Return the total RAM.
   Future<int?> getTotalMemory();
 
-  // UNUSED: Memory and storage methods not used by DevicePerformance
-  // /// Return the available RAM.
-  // Future<int?> getFreeMemory();
-
-  // /// Return the total disk space.
-  // Future<int?> getTotalStorage();
-
-  // /// Return the available disk space.
-  // Future<int?> getFreeStorage();
-
-  // /// Return if the battery is in eco mode.
-  // Future<bool?> isBatteryEcoMode();
-
-  // /// Return a stream is battery eco mode.
-  // Stream<bool?> get isBatteryEcoModeStream;
-
   // USED: Device range is used by DevicePerformance
   /// Return the eco range.
   Future<DeviceRange?> getDeviceRange();
-
-  // UNUSED: Connectivity methods not used by DevicePerformance
-  // /// Stream an object Connectivity with type and wifi signal strength.
-  // Stream<Connectivity> get connectivityStream;
-
-  // /// Return an object Connectivity with type and wifi signal strength.
-  // Future<Connectivity> getConnectivity();
-
-  // /// Return a boolean which represents if the network is good enough.
-  // Future<bool?> hasEnoughNetwork();
-
-  // /// Stream a boolean which represents if the network is good enough.
-  // Stream<bool?> hasEnoughNetworkStream();
 }
 
 class DeviceRange {

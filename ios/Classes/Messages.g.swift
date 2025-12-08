@@ -38,217 +38,19 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   if value is NSNull { return nil }
   return value as! T?
 }
-
-enum BatteryState: Int {
-  case charging = 0
-  case discharging = 1
-  case full = 2
-  case unknown = 3
-}
-
-enum ThermalState: Int {
-  /// nominal value
-  case safe = 0
-  /// device is getting warm, but not under throttling
-  case fair = 1
-  /// device is getting warm and performance is throttled
-  case serious = 2
-  /// performance is throttled, device is too hot
-  case critical = 3
-  /// unknown state
-  case unknown = 4
-}
-
-enum ConnectivityType: Int {
-  case ethernet = 0
-  case wifi = 1
-  case mobile2g = 2
-  case mobile3g = 3
-  case mobile4g = 4
-  case mobile5g = 5
-  case none = 6
-  case unknown = 7
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct Connectivity {
-  var type: ConnectivityType
-  var wifiSignalStrength: Int64? = nil
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ __pigeon_list: [Any?]) -> Connectivity? {
-    let type = ConnectivityType(rawValue: __pigeon_list[0] as! Int)!
-    let wifiSignalStrength: Int64? = isNullish(__pigeon_list[1]) ? nil : (__pigeon_list[1] is Int64? ? __pigeon_list[1] as! Int64? : Int64(__pigeon_list[1] as! Int32))
-
-    return Connectivity(
-      type: type,
-      wifiSignalStrength: wifiSignalStrength
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      type.rawValue,
-      wifiSignalStrength,
-    ]
-  }
-}
-private class EcoModeApiCodecReader: FlutterStandardReader {
-  override func readValue(ofType type: UInt8) -> Any? {
-    switch type {
-    case 128:
-      return Connectivity.fromList(self.readValue() as! [Any?])
-    default:
-      return super.readValue(ofType: type)
-    }
-  }
-}
-
-private class EcoModeApiCodecWriter: FlutterStandardWriter {
-  override func writeValue(_ value: Any) {
-    if let value = value as? Connectivity {
-      super.writeByte(128)
-      super.writeValue(value.toList())
-    } else {
-      super.writeValue(value)
-    }
-  }
-}
-
-private class EcoModeApiCodecReaderWriter: FlutterStandardReaderWriter {
-  override func reader(with data: Data) -> FlutterStandardReader {
-    return EcoModeApiCodecReader(data: data)
-  }
-
-  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return EcoModeApiCodecWriter(data: data)
-  }
-}
-
-class EcoModeApiCodec: FlutterStandardMessageCodec {
-  static let shared = EcoModeApiCodec(readerWriter: EcoModeApiCodecReaderWriter())
-}
-
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol EcoModeApi {
-  // UNUSED: Platform info not used by DevicePerformance
-  // func getPlatformInfo() throws -> String
-  
-  // UNUSED: Battery methods not used by DevicePerformance
-  // func getBatteryLevel() throws -> Double
-  // func getBatteryState() throws -> BatteryState
-  // func isBatteryInLowPowerMode() throws -> Bool
-  
-  // UNUSED: Thermal state not used by DevicePerformance
-  // func getThermalState() throws -> ThermalState
-  
-  // Used internally by getEcoScore
-  func getProcessorCount() throws -> Int64
-  
-  // USED: Total memory is used by DevicePerformance
   func getTotalMemory() throws -> Int64
-  
-  // UNUSED: Free memory not used by DevicePerformance
-  // func getFreeMemory() throws -> Int64
-  
-  // Used internally by getEcoScore
-  func getTotalStorage() throws -> Int64
-  
-  // UNUSED: Free storage not used by DevicePerformance
-  // func getFreeStorage() throws -> Int64
-  
-  // USED: getEcoScore is used internally by getDeviceRange
   func getEcoScore() throws -> Double?
-  
-  // UNUSED: Connectivity not used by DevicePerformance
-  // func getConnectivity() throws -> Connectivity
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
 class EcoModeApiSetup {
   /// The codec used by EcoModeApi.
-  static var codec: FlutterStandardMessageCodec { EcoModeApiCodec.shared }
   /// Sets up an instance of `EcoModeApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: EcoModeApi?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getPlatformInfoChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getPlatformInfo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getPlatformInfoChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getPlatformInfo()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getPlatformInfoChannel.setMessageHandler(nil)
-    }
-    let getBatteryLevelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getBatteryLevel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getBatteryLevelChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getBatteryLevel()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getBatteryLevelChannel.setMessageHandler(nil)
-    }
-    let getBatteryStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getBatteryState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getBatteryStateChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getBatteryState()
-          reply(wrapResult(result.rawValue))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getBatteryStateChannel.setMessageHandler(nil)
-    }
-    let isBatteryInLowPowerModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.isBatteryInLowPowerMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      isBatteryInLowPowerModeChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.isBatteryInLowPowerMode()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      isBatteryInLowPowerModeChannel.setMessageHandler(nil)
-    }
-    let getThermalStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getThermalState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getThermalStateChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getThermalState()
-          reply(wrapResult(result.rawValue))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getThermalStateChannel.setMessageHandler(nil)
-    }
-    let getProcessorCountChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getProcessorCount\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getProcessorCountChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getProcessorCount()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getProcessorCountChannel.setMessageHandler(nil)
-    }
-    let getTotalMemoryChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getTotalMemory\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTotalMemoryChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getTotalMemory\(channelSuffix)", binaryMessenger: binaryMessenger)
     if let api = api {
       getTotalMemoryChannel.setMessageHandler { _, reply in
         do {
@@ -261,46 +63,7 @@ class EcoModeApiSetup {
     } else {
       getTotalMemoryChannel.setMessageHandler(nil)
     }
-    let getFreeMemoryChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getFreeMemory\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getFreeMemoryChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getFreeMemory()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getFreeMemoryChannel.setMessageHandler(nil)
-    }
-    let getTotalStorageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getTotalStorage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getTotalStorageChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getTotalStorage()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getTotalStorageChannel.setMessageHandler(nil)
-    }
-    let getFreeStorageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getFreeStorage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getFreeStorageChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getFreeStorage()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getFreeStorageChannel.setMessageHandler(nil)
-    }
-    let getEcoScoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getEcoScore\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getEcoScoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getEcoScore\(channelSuffix)", binaryMessenger: binaryMessenger)
     if let api = api {
       getEcoScoreChannel.setMessageHandler { _, reply in
         do {
@@ -312,19 +75,6 @@ class EcoModeApiSetup {
       }
     } else {
       getEcoScoreChannel.setMessageHandler(nil)
-    }
-    let getConnectivityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_eco_mode.EcoModeApi.getConnectivity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getConnectivityChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getConnectivity()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getConnectivityChannel.setMessageHandler(nil)
     }
   }
 }

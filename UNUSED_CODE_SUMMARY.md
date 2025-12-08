@@ -116,3 +116,4 @@ If DevicePerformance needs additional metrics in the future:
 - Ensure the native implementations are also uncommented
 - Test on both Android and iOS platforms
 
+
