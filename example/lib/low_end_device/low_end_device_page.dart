@@ -27,28 +27,8 @@ class _LowEndDevicePageState extends State<LowEndDevicePage> {
     return ResultsView(
       [
         ResultLine(
-          label: 'Platform info',
-          future: widget.ecoMode.getPlatformInfo,
-        ),
-        ResultLine(
-          label: 'Processor count',
-          future: widget.ecoMode.getProcessorCount,
-        ),
-        ResultLine(
           label: 'Total memory',
           future: widget.ecoMode.getTotalMemory,
-        ),
-        ResultLine(
-          label: 'Free memory',
-          future: widget.ecoMode.getFreeMemoryReachable,
-        ),
-        ResultLine(
-          label: 'Total storage',
-          future: widget.ecoMode.getTotalStorage,
-        ),
-        ResultLine(
-          label: 'Free storage',
-          future: widget.ecoMode.getFreeStorage,
         ),
         ResultLine(
           label: 'Device range score',

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_eco_mode/flutter_eco_mode.dart';
-import 'package:flutter_eco_mode_example/eco_battery/eco_battery_page.dart';
 import 'package:flutter_eco_mode_example/low_end_device/low_end_device_page.dart';
-import 'package:flutter_eco_mode_example/connectivity_state/connectivity_state_page.dart';
 import 'package:flutter_eco_mode_example/wrapper_page.dart';
 
 void main() {
@@ -61,7 +59,6 @@ class _MyAppState extends State<_MyApp> {
 
   @override
   void dispose() {
-    plugin.dispose();
     super.dispose();
   }
 
@@ -80,30 +77,6 @@ class _MyAppState extends State<_MyApp> {
               ),
             ),
             child: const Text("Low End Device"),
-          ),
-          const SizedBox(height: 32),
-          TextButton(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => WrapperPage(
-                  EcoBatteryPage(plugin),
-                  title: "Eco Battery",
-                ),
-              ),
-            ),
-            child: const Text("Eco Battery"),
-          ),
-          const SizedBox(height: 32),
-          TextButton(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => WrapperPage(
-                  ConnectivityStatePage(plugin),
-                  title: "Connectivity State",
-                ),
-              ),
-            ),
-            child: const Text("Connectivity State"),
           ),
         ],
       ),

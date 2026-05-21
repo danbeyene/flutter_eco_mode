@@ -93,9 +93,6 @@ class _ResultState extends State<_Result> {
   void initState() {
     super.initState();
     _future = widget.future.call();
-    if (widget.stream != null) {
-      _stream = widget.stream!.call().withInitialValue(_future);
-    }
   }
 
   @override
